@@ -2,6 +2,8 @@ from __future__ import annotations
 
 import sys
 import types
+from typing import TypeVarTuple
+
 from collections.abc import Generator, Iterable, Iterator
 from typing import (
     Any,
@@ -236,10 +238,11 @@ else:
     _GENERIC_ALIAS_TYPE = (_GenericAlias,)
 
 ScalarType = TypeVar("ScalarType", bound=np.generic, covariant=True)
+Shape = TypeVarTuple("Shape")
 
 if TYPE_CHECKING or sys.version_info >= (3, 9):
     _DType = np.dtype[ScalarType]
-    NDArray = np.ndarray[Any, np.dtype[ScalarType]]
+    NDArray = np.ndarray[*Shape, np.dtype[ScalarType]]
 else:
     _DType = _GenericAlias(np.dtype, (ScalarType,))
     NDArray = _GenericAlias(np.ndarray, (Any, _DType))
